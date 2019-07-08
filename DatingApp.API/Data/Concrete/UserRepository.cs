@@ -10,12 +10,12 @@ namespace DatingApp.API.Data.Concrete
     {
         public UserRepository(DataContext context) : base(context) { }
 
-        public virtual async Task<IEnumerable<User>> GetAll()
+        public override async Task<IEnumerable<User>> GetAll()
         {
             return await _context.Users.Include(p=> p.Photos).ToListAsync();
         }
 
-        public virtual async Task<User> GetById(int id){
+        public override async Task<User> GetById(int id){
             return await _context.Users.Include(p=> p.Photos).FirstOrDefaultAsync(x=> x.Id == id);
         }
     }
