@@ -22,6 +22,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace DatingApp.API
 {
@@ -45,6 +46,10 @@ namespace DatingApp.API
                     });
             services.AddCors();
             services.AddAutoMapper();
+            services.AddSwaggerGen( config => {
+                config.SwaggerDoc("v1", new Info { Title = "DatingApp.API", Version = "v1"});
+            });
+
             services.AddTransient<DataSeeder>();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -89,6 +94,10 @@ namespace DatingApp.API
             }
             // seeder.SeedUser();
             // app.UseHttpsRedirection();
+            app.UseSwagger();
+            app.UseSwaggerUI(config => {
+                config.SwaggerEndpoint("/swagger/v1/swagger.json", "DatingApp API V1");
+            });
             app.UseCors(x => x.AllowAnyOrigin().AllowCredentials().AllowAnyHeader().AllowAnyMethod());
             app.UseAuthentication();
             app.UseMvc();

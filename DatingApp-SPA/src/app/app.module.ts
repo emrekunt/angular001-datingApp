@@ -7,7 +7,6 @@ import { RouterModule } from '@angular/router';
 import { JwtModule } from '@auth0/angular-jwt';
 import { NgxGalleryModule } from 'ngx-gallery';
 
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavComponent } from './_components/nav/nav.component';
@@ -26,6 +25,9 @@ import { MemberCardComponent } from './_components/members/member-card/member-ca
 import { MemberDetailComponent } from './_components/members/member-detail/member-detail.component';
 import { MemberDetailResolver } from './_resolvers/member-detail.resolver';
 import { MemberListResolver } from './_resolvers/member-list.resolver';
+import { MemberEditComponent } from './_components/members/member-edit/member-edit.component';
+import { MemberEditResolver } from './_resolvers/member-edit.resolver';
+import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changes.guard';
 
 
 export function tokenGetter() {
@@ -42,7 +44,8 @@ export function tokenGetter() {
       MessagesComponent,
       ListsComponent,
       MemberCardComponent,
-      MemberDetailComponent
+      MemberDetailComponent,
+      MemberEditComponent
    ],
    imports: [
       BrowserModule,
@@ -72,7 +75,9 @@ export function tokenGetter() {
        AuthGuard,
        UserService,
        MemberDetailResolver,
-       MemberListResolver
+       MemberListResolver,
+       MemberEditResolver,
+       PreventUnsavedChanges
    ],
    bootstrap: [
       AppComponent
