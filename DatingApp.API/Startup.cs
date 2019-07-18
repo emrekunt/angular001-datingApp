@@ -46,12 +46,14 @@ namespace DatingApp.API
                     });
             services.AddCors();
             services.AddAutoMapper();
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             services.AddSwaggerGen( config => {
                 config.SwaggerDoc("v1", new Info { Title = "DatingApp.API", Version = "v1"});
             });
 
             services.AddTransient<DataSeeder>();
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IPhotoRepository, PhotoRepository>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => {
                     options.TokenValidationParameters = new TokenValidationParameters {

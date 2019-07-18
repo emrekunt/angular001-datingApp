@@ -16,7 +16,7 @@ namespace DatingApp.API.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UsersController : BaseApiController
     {
         private readonly IUserRepository _repo;
         private readonly IMapper _mapper;
@@ -46,9 +46,8 @@ namespace DatingApp.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, UserForUpdateDTO userForUpdateDTO)
         {
-            if(id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)){
+            if (IsAuthenticated(id))
                 return Unauthorized();
-            }
 
             var userFromRepo = await _repo.GetById(id);
             _mapper.Map(userForUpdateDTO, userFromRepo);
@@ -58,8 +57,6 @@ namespace DatingApp.API.Controllers
             
             throw new Exception($"Updatind user {id} failed");
         }
-
-
 
     }
 }
