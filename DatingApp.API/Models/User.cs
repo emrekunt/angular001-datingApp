@@ -7,7 +7,7 @@ namespace DatingApp.API.Models
     {
         public int Id { get; set; }
         public string Username { get; set; }
-        public byte[] Password { get; set; }
+        public byte[] PasswordHash { get; set; }
         public byte[] PaswordSalt { get; set; }
         public string Gender { get; set; }
         public string City { get; set; }

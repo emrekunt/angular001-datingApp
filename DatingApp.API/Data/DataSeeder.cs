@@ -22,7 +22,7 @@ namespace DatingApp.API.Data
                 byte[] passwordSalt, passwordHash;
                 GeneratePasswordHash("1234", out passwordHash, out passwordSalt);
 
-                user.Password = passwordHash;
+                user.PasswordHash = passwordHash;
                 user.PaswordSalt = passwordSalt;
 
                 _context.Users.Add(user);

@@ -84,6 +84,9 @@ namespace DatingApp.API.Controllers
             if (userFromRepo == null)
                 BadRequest("User can not vbe found!");
 
+            if(userFromRepo.Photos.Count < 1)
+                photo.IsMain = true;
+
             photo.User = userFromRepo;
             photo.UserId = userFromRepo.Id;
 
@@ -157,6 +160,7 @@ namespace DatingApp.API.Controllers
 
         }
 
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<bool> UserHasPhoto(int userId, int id)
         {
             var userFromRepo = await _userRepo.GetById(userId);

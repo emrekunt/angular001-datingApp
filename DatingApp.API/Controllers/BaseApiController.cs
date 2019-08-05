@@ -7,6 +7,7 @@ namespace DatingApp.API.Controllers
 {
     public class BaseApiController : ControllerBase
     {
+        [ApiExplorerSettings(IgnoreApi = true)]
         public bool IsAuthenticated(int userId)
         {
             if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
