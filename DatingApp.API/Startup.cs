@@ -38,25 +38,32 @@ namespace DatingApp.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(x=> x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                    .AddJsonOptions(opt => {
-                       opt.SerializerSettings.ReferenceLoopHandling =
-                       Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                    .AddJsonOptions(opt =>
+                    {
+                        opt.SerializerSettings.ReferenceLoopHandling =
+                        Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                     });
             services.AddCors();
             services.AddAutoMapper();
+
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
-            services.AddSwaggerGen( config => {
-                config.SwaggerDoc("v1", new Info { Title = "DatingApp.API", Version = "v1"});
+            services.AddSwaggerGen(config =>
+            {
+                config.SwaggerDoc("v1", new Info { Title = "DatingApp.API", Version = "v1" });
             });
 
             services.AddTransient<DataSeeder>();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IPhotoRepository, PhotoRepository>();
+            services.AddScoped<LogUserActivity>();
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options => {
-                    options.TokenValidationParameters = new TokenValidationParameters {
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII
                             .GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
@@ -78,12 +85,15 @@ namespace DatingApp.API
             }
             else
             {
-                app.UseExceptionHandler(builder => {
-                    builder.Run(async context => {
-                        context.Response.StatusCode = (int) HttpStatusCode.InternalServerError; 
+                app.UseExceptionHandler(builder =>
+                {
+                    builder.Run(async context =>
+                    {
+                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
                         var error = context.Features.Get<IExceptionHandlerFeature>();
-                        if(error != null) {
+                        if (error != null)
+                        {
                             context.Response.AddApplicationError(error.Error.Message);
                             await context.Response.WriteAsync(error.Error.Message);
                         }
@@ -97,7 +107,8 @@ namespace DatingApp.API
             // seeder.SeedUser();
             // app.UseHttpsRedirection();
             app.UseSwagger();
-            app.UseSwaggerUI(config => {
+            app.UseSwaggerUI(config =>
+            {
                 config.SwaggerEndpoint("/swagger/v1/swagger.json", "DatingApp API V1");
             });
             app.UseCors(x => x.AllowAnyOrigin().AllowCredentials().AllowAnyHeader().AllowAnyMethod());
